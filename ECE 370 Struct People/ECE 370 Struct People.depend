@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1533242978 source:c:\users\rachel\documents\github\ece-370-struct\ece 370 struct people\main.cpp
+	<iostream>
+	<fstream>
+	<cstring>
+	<cstdlib>
+	<cctype>
+	<algorithm>
+	<cctype>
+	<iomanip>
+
