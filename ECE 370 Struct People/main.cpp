@@ -45,28 +45,15 @@ int Add2Struct(struct Person p_ptr[],int pplIndex);
 void PSearch(struct Person p_ptr[],int pplIndex);
 string Str2Upper(string s);
 
-
-    ifstream a1("a1.txt");
-    string s;
-
-    while (getline(a1,s)){
-            if (s.size() != 0){
-                    //don't do any of these steps if the line read is empty
-                    //Save ID
-                    p_ptr[p_index].ID = atoi(s.c_str());
-                    cout << person_ptr[pplIndex].ID << endl;
-                    getline(a1,s);
-                    p_ptr[p_index].name = s;
-                    cout << person_ptr[pplIndex].name << endl;
-                    getline(a1,s);
-                    p_ptr[p_index].address = s;
-                    cout << p_ptr[p_index].address << endl;
-                    p_index ++;
-            }
+void printStruct(struct Person p_ptr[],int index)
+{
+    for(int i=0;i<index;i++)
+    {
+        cout<<p_ptr[i].ID<<endl;
+        cout<<p_ptr[i].name<<endl;
+        cout<<p_ptr[i].address<<endl<<endl;
     }
 }
-
-*/
 
 
 void headerTxt(){
@@ -82,7 +69,8 @@ void headerTxt(){
 
 int main()
 {
-    Person *person_ptr = new Person[20]; //allocate 20 structures, one per person
+    //Person *person_ptr = new Person[20]; //allocate 20 structures, one per person
+    struct Person person_ptr[MAX_SIZE];
     ifstream a1("a1.txt");
     string s;
     int pplIndex = 0; //keep track of how many structures are filled or what structure is being filled
@@ -100,16 +88,32 @@ int main()
     cout << "Updated index is "<<pplIndex<<"/"<<MAX_SIZE<<endl;
     PSearch(person_ptr,pplIndex);
 
+    return 0;
+}
 
 
-
-
-
-
-
-
-
-    string yesNo = ""; //Holds the answer to a yes/no question
+//Function contents
+int LD2Struct(struct Person p_ptr[])
+{
+    ifstream a1("a1.txt");//contains list of people data to load
+    string s;
+    int pplIndex = 0;
+    
+    while (getline(a1,s))
+    {
+        if(s.size() != 0)
+        {
+            //dont do any of these steps if the line read is empty
+            p_ptr[pplIndex].ID = atoi(s.c_str()); //Store ID
+            
+            getline(a1,s);
+            p_ptr[pplIndex].name = s; //Store address
+            
+            pplIndex++;
+        }
+    }
+    return pplIndex;
+}
 
 
 int Add2Struct(struct Person p_ptr[],int pplIndex){
@@ -142,21 +146,6 @@ int Add2Struct(struct Person p_ptr[],int pplIndex){
     }
     //This is multiple nested While loops. Perhaps there is a better way to do this
     //with one while loop and switch case?
-    while (yesNo == "Y" && pplIndex <= 20)
-        {
-            //pplIndex will break the add person loop once the structure is full
-
-
-    //Now we need to add people if the user said Yes
-    //define variables to be used in loop where user adds people to the structure
-
-    //Input is taken, but is not being put into the structure
-    string valid;
-    string tp;
-    int int_in;
-    string L_name, F_name;
-    string num, street, city, state, zip;
-
 
     while (yesNo == "Y" && pplIndex <= 20){
             //pplIndex will break the add person loop once the structure is full
@@ -180,7 +169,8 @@ int Add2Struct(struct Person p_ptr[],int pplIndex){
 
         cout << endl;
 
-        while (valid != "Y"){
+        while (valid != "Y")
+        {
                 //This will loop until user is satisfied with their ID entry
         printf("Please re-enter the ID: ");
         cin >> int_in;
@@ -340,15 +330,11 @@ int Add2Struct(struct Person p_ptr[],int pplIndex){
 
 
     }
+    return pplIndex;
+}
 
-string u_in;
-string P_name; //found name
-
-bool flag = false; //This flag will switch to true if at least one name is found via the search function
-
-
-
-void PSearch(struct Person p_ptr[],int pplIndex){
+void PSearch(struct Person p_ptr[],int pplIndex)
+{
     string u_in; //user input
     string L_name; //Stores the last name
     string P_name; //found name, Person's name
@@ -356,7 +342,7 @@ void PSearch(struct Person p_ptr[],int pplIndex){
     string valid;
 
     int srchIndex = 0; //keep track of how many structures are filled or what structure is being filled
-
+    bool flag = false; //this flag will switch to tru if at least one name is found
 
 
 
@@ -473,6 +459,10 @@ void PSearch(struct Person p_ptr[],int pplIndex){
                                 i = MAX_SIZE+1;
                                 break;
 
+                            }
+                            else
+                            {
+                                cout<<"Error."<<endl;
                             }
                         }
                         //toggle flag to true
