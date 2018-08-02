@@ -8,23 +8,13 @@ ID, Name, Address, Blank, ID,.....
 The program will have to be modified if it encounters a text file that does not follow that pattern
 */
 
-/*
-Problem I notice: When gathering user input for Y/N question, we only want one character
-If the user enters more than one character, it loops for each character entered,
-printing the question each time.
-How to fix this? Limit the user input.
-
-*/
-
-
 #include <iostream>
 #include <fstream>
 #include <cstring>
 #include <cstdlib>
-#include <cctype>
 #include <algorithm>
-#include <cctype>
-#include <iomanip>
+
+
 
 #define MAX_SIZE 20 //Maximum size of the structure
 
@@ -50,7 +40,7 @@ struct Found_p {
 int LD2Struct(struct Person p_ptr[]);
 int Add2Struct(struct Person p_ptr[],int pplIndex);
 void PSearch(struct Person p_ptr[],int pplIndex);
-
+string Str2Upper(string s);
 
 void printStruct(struct Person p_ptr[],int index){
     for(int i=0;i<index;i++){
@@ -127,24 +117,37 @@ int LD2Struct(struct Person p_ptr[]){
 }
 
 int Add2Struct(struct Person p_ptr[],int pplIndex){
-    char yesNo; //Holds the answer to a yes/no question
-    char valid; // secondary Y/N question, confirm validity of what was entered
+    string yesNo; //Holds the answer to a yes/no question
+    string valid; // secondary Y/N question, confirm validity of what was entered
     int int_in;
     string L_name, F_name;
     string num, street, city, state, zip;
     string address;
 
-    while ((yesNo != 'Y')&&(yesNo!= 'N')){
+    while ((yesNo != "Y")&&(yesNo!= "N")){
             //Unless the user gives a valid response, this will continue to loop
+        cin.clear();
        printf("\n Is there an additional person to add? Y/N ");
-        cin >> yesNo;
-        yesNo = toupper(yesNo);
-        cout << yesNo << endl;
+       cin >> yesNo;
+       if(yesNo.length()>1)
+       {
+           cout<<"Input too long." <<endl;
+       }
+       else
+        {
+            yesNo = Str2Upper(yesNo);
+        }
+
+
+        //yesNo = toupper(yesNo);
+
+        //cout << yesNo << endl;
         cout << endl;
     }
     //This is multiple nested While loops. Perhaps there is a better way to do this
     //with one while loop and switch case?
-    while (yesNo == 'Y' && pplIndex <= 20){
+    while (yesNo == "Y" && pplIndex <= 20)
+        {
             //pplIndex will break the add person loop once the structure is full
 
         printf("Enter their ID number: "); //get ID
@@ -154,22 +157,38 @@ int Add2Struct(struct Person p_ptr[],int pplIndex){
         cout << p_ptr[pplIndex].ID<<endl; //to confirm what was added
         printf("Is this correct? Y/N ");
         cin >> valid;
-        valid = toupper(valid);
+        if(valid.length()>1)
+       {
+           cout<<"Input too long." <<endl;
+       }
+       else
+        {
+            valid = Str2Upper(valid);
+        }
+        //valid = toupper(valid);
         cout << endl;
 
-        while (valid != 'Y'){
+        while (valid != "Y"){
                 //This will loop until user is satisfied with their ID entry
         printf("Please re-enter the ID: ");
         cin >> int_in;
         cout << endl;
         printf("Is this correct? Y/N ");
         cin >> valid;
-        valid = toupper(valid);
+        if(valid.length()>1)
+       {
+           cout<<"Input too long." <<endl;
+       }
+       else
+        {
+            valid = Str2Upper(valid);
+        }
+        //valid = toupper(valid);
         cout << endl;
         };
         //save to structure
        // person_ptr[pplIndex].ID = *userInput;
-        valid = ' ';
+        valid = " ";
 
 
         //get name
@@ -181,10 +200,19 @@ int Add2Struct(struct Person p_ptr[],int pplIndex){
         cout << endl;
         printf("Is this correct? Y/N ");
         cin >> valid;
-        valid = toupper(valid);
+        if(valid.length()>1)
+       {
+           cout<<"Input too long." <<endl;
+       }
+       else
+        {
+            valid = Str2Upper(valid);
+        }
+
+        //valid = toupper(valid);
         cout << endl;
 
-        while (valid != 'Y'){
+        while (valid != "Y"){
                 //This will loop until user is satisfied with their name entry
         printf("Enter their Last Name: ");
         cin >> L_name; //Maybe we need to figure out how to
@@ -197,10 +225,18 @@ int Add2Struct(struct Person p_ptr[],int pplIndex){
         //cin >> *userInput;
         printf("Is this correct? Y/N ");
         cin >> valid;
-        valid = toupper(valid);
+        if(valid.length()>1)
+       {
+           cout<<"Input too long." <<endl;
+       }
+       else
+        {
+            valid = Str2Upper(valid);
+        }
+        //valid = toupper(valid);
         cout << endl;
         };
-        valid = ' ';
+        valid = " " ;
 
         //get address
         printf("Enter their address in this format: \n 1234 MeadowBrookLn Detroit MI 48230 \n ");
@@ -212,10 +248,18 @@ int Add2Struct(struct Person p_ptr[],int pplIndex){
         cout << p_ptr[pplIndex].address << endl;
         printf("Is this correct? Y/N ");
         cin >> valid;
-        valid = toupper(valid);
+        if(valid.length()>1)
+       {
+           cout<<"Input too long." <<endl;
+       }
+       else
+        {
+            valid = Str2Upper(valid);
+        }
+        //valid = toupper(valid);
         cout << endl;
 
-        while (valid != 'Y'){
+        while (valid != "Y"){
                 //This will loop until user is satisfied with their ID entry
                 //The street name cannot have spaces in it in this version
        printf("Enter their address in this format: \n 1234 MeadowBrook Ln, Detroit, MI 48230 \n");
@@ -226,12 +270,20 @@ int Add2Struct(struct Person p_ptr[],int pplIndex){
         //cout << p_ptr[pplIndex].address << endl;
         printf("Is this correct? Y/N ");
         cin >> valid;
-        valid = toupper(valid);
+        if(valid.length()>1)
+       {
+           cout<<"Input too long." <<endl;
+       }
+       else
+        {
+            valid = Str2Upper(valid);
+        }
+        //valid = toupper(valid);
         cout << endl;
         };
         //save to structure
         //person_ptr[pplIndex].address = *userInput;
-        valid = ' ';
+        valid = " ";
 
 
 //****************************************
@@ -247,10 +299,23 @@ int Add2Struct(struct Person p_ptr[],int pplIndex){
 //**************************************************
 
         pplIndex++ ;
-        printf("Is there an additional person to add? Y/N ");
-        cin >> yesNo;
-        yesNo = toupper(yesNo);
-        cout << endl;
+        yesNo = " ";//clear it before entering loop.
+        while(yesNo != "Y" && yesNo != "N")
+        {
+            printf("Is there an additional person to add? Y/N ");
+            cin >> yesNo;
+            if(yesNo.length()>1)
+           {
+               cout<<"Input too long." <<endl;
+           }
+           else
+            {
+                yesNo = Str2Upper(yesNo);
+            }
+            //yesNo = toupper(yesNo);
+            cout << endl;
+            }
+
     }
     return pplIndex;
 
@@ -260,8 +325,8 @@ void PSearch(struct Person p_ptr[],int pplIndex){
     string u_in; //user input
     string L_name; //Stores the last name
     string P_name; //found name, Person's name
-    char yesNo;
-    char valid;
+    string yesNo;
+    string valid;
     int srchIndex = 0; //keep track of how many structures are filled or what structure is being filled
     bool flag = false; //This flag will switch to true if at least one name is found via the search function
 
@@ -271,24 +336,49 @@ void PSearch(struct Person p_ptr[],int pplIndex){
     //Now we need to let the user search for information by last name
     while(true){//maybe want a better statement than TRUE.
         flag = false; //when loop restarts, flag needs to be reset to false
-        printf("Would you like to search for someone by last name? Y/N ");
-        cin >> setw(1)>>yesNo;
-        yesNo = toupper(yesNo);
+        printf("\nWould you like to search for someone by last name? Y/N ");
+        cin >>yesNo;
+        if(yesNo.length()>1)
+       {
+           cout<<"Input too long." <<endl;
+       }
+       else
+        {
+            yesNo = Str2Upper(yesNo);
+        }
+        //yesNo = toupper(yesNo);
 
-        if(yesNo == 'Y'){
+        if(yesNo == "Y"){
             //Proceed to search structures by last name & print results
             printf("Please enter their last name: ");
             cin >> u_in;
             printf("Is this correct? Y/N ");
             cin >> valid;
-            valid = toupper(valid);
-            while(valid != 'Y'){
+            if(valid.length()>1)
+               {
+                   cout<<"Input too long." <<endl;
+               }
+               else
+                {
+                    valid = Str2Upper(valid);
+                }
+            //valid = toupper(valid);
+            while(valid != "Y"){
                 //Loop prompting user to retype their input
                 printf("Please enter their last name: ");
                 cin >> u_in;
                 printf("Is this correct? Y/N ");
                 cin >> valid;
-                valid = toupper(valid);
+                if(valid.length()>1)
+               {
+                   cout<<"Input too long." <<endl;
+               }
+               else
+                {
+                    valid = Str2Upper(valid);
+                }
+
+                //valid = toupper(valid);
 
             }
             //u_in = toupper(u_in.c_str());
@@ -371,7 +461,7 @@ void PSearch(struct Person p_ptr[],int pplIndex){
             }
 
         }
-        else if(yesNo == 'N')
+        else if(yesNo == "N")
             {
                 break; //break the While Loop
             }
@@ -396,4 +486,10 @@ for(int i=0;i<srchIndex;i++)
     }
 return;
 };
+
+string Str2Upper(string s)
+{
+    transform(s.begin(),s.end(), s.begin(), ::toupper);
+    return s;
+}
 
