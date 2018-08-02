@@ -8,6 +8,14 @@ ID, Name, Address, Blank, ID,.....
 The program will have to be modified if it encounters a text file that does not follow that pattern
 */
 
+/*
+Problem I notice: When gathering user input for Y/N question, we only want one character
+If the user enters more than one character, it loops for each character entered,
+printing the question each time.
+How to fix this? Limit the user input.
+
+*/
+
 
 #include <iostream>
 #include <fstream>
@@ -16,6 +24,7 @@ The program will have to be modified if it encounters a text file that does not 
 #include <cctype>
 #include <algorithm>
 #include <cctype>
+#include <iomanip>
 
 #define MAX_SIZE 20 //Maximum size of the structure
 
@@ -33,6 +42,7 @@ struct Found_p {
     //As an attempt to solve an error
     int p_ID;
     string p_name;
+    string p_address;
 
 };
 
@@ -74,8 +84,6 @@ int main()
     ifstream a1("a1.txt");
     string s;
     int pplIndex = 0; //keep track of how many structures are filled or what structure is being filled
-    char yesNo; //Holds the answer to a yes/no question
-    int index =0;
 
     headerTxt();
 
@@ -89,104 +97,6 @@ int main()
     cout << "Updated index is "<<pplIndex<<"/"<<MAX_SIZE<<endl;
     PSearch(person_ptr,pplIndex);
 
-
-string u_in;
-string P_name; //found name
-
-bool flag = false; //This flag will switch to true if at least one name is found via the search function
-
-
-
-
-    Person *found_prsn = new Person[20]; //allocate 20 structures since it it technically
-    //only possible to get 20 names as results
-    int srchIndex = 0; //keep track of how many structures are filled or what structure is being filled
-
-
-
-/*
-    //Now we need to let the user search for information by last name
-    while(true){
-            flag = false; //when loop restarts, flag needs to be reset to false
-        printf("Would you like to search for someone by last name? Y/N ");
-        cin >> yesNo;
-        yesNo = toupper(yesNo);
-        if(yesNo == 'Y'){
-            //Proceed to search structures by last name & print results
-            printf("Please enter their last name (Capitalize first letter only): ");
-            cin >> u_in;
-            printf("Is this correct? Y/N ");
-            cin >> valid;
-            valid = toupper(valid);
-            while(valid != 'Y'){
-                //Loop prompting user to retype their input
-                printf("Please enter their last name (Capitalize first letter only): ");
-                cin >> u_in;
-                printf("Is this correct? Y/N ");
-                cin >> valid;
-                valid = toupper(valid);
-
-            }
-            //u_in = toupper(u_in.c_str());
-            transform(u_in.begin(),u_in.end(), u_in.begin(), ::toupper);
-            //now use  last name string to search
-            for(int i=0; i<20; i++){
-                    //Searching the entire structure for last name
-                L_name = person_ptr[i].name;
-                L_name.resize(u_in.size());
-                transform(L_name.begin(),L_name.end(), L_name.begin(), ::toupper);
-                    if(u_in.compare(L_name)==0){
-                        //If comparison is true, then print result
-                        printf("\nID: ");
-                        cout << person_ptr[i].ID << endl;
-                        printf("Name: ");
-                        cout << person_ptr[i].name << endl;
-                        printf("Address: ");
-                        cout << person_ptr[i].address << endl;
-                        //Save to found structure
-                        //search found structure to see if last name already exists
-                        for(int i=0;i<20;i++){
-                                P_name = found_prsn[i].name;
-                        P_name.resize(u_in.size());
-                            if(u_in.compare(P_name)!=0 && P_name.size()!= 0){
-                                //if the searched last name isn't already in structure, add it
-                                found_prsn[srchIndex].ID = person_ptr[i].ID;
-                                found_prsn[srchIndex].name = person_ptr[i].name;
-                                found_prsn[srchIndex].address = person_ptr[i].address;
-                                srchIndex++;
-
-                            }
-                        }
-                        //toggle flag to true
-                        flag = true;
-                    }
-
-
-            }
-            if(flag == true){
-                printf("\nSearch results are listed above. \n");
-            }
-            else{
-                printf("\nThat last name is not in our records. \n");
-            }
-
-        }
-        else if(yesNo == 'N'){
-            break; //break the While Loop
-        }
-    }
-
-printf("\nComplete Search History: \n");
-for(int i=0;i<20;i++){
-    //print found search results
-    printf("ID: ");
-    cout << found_prsn[i].ID <<endl;
-    printf("Name: ");
-    cout << found_prsn[i].name << endl;
-    printf("Address: ");
-    cout << found_prsn[i].address <<endl <<endl;
-
-} */
 
 
     return 0;
@@ -348,7 +258,7 @@ int Add2Struct(struct Person p_ptr[],int pplIndex){
 
 void PSearch(struct Person p_ptr[],int pplIndex){
     string u_in; //user input
-    string L_name;
+    string L_name; //Stores the last name
     string P_name; //found name, Person's name
     char yesNo;
     char valid;
@@ -359,10 +269,10 @@ void PSearch(struct Person p_ptr[],int pplIndex){
 
 
     //Now we need to let the user search for information by last name
-    while(true){
+    while(true){//maybe want a better statement than TRUE.
         flag = false; //when loop restarts, flag needs to be reset to false
         printf("Would you like to search for someone by last name? Y/N ");
-        cin >> yesNo;
+        cin >> setw(1)>>yesNo;
         yesNo = toupper(yesNo);
 
         if(yesNo == 'Y'){
@@ -391,43 +301,53 @@ void PSearch(struct Person p_ptr[],int pplIndex){
                 transform(L_name.begin(),L_name.end(), L_name.begin(), ::toupper);
                     if(u_in.compare(L_name)==0){
                         //If comparison is true, then print result
+                        /*
                         printf("\nID: ");
                         cout << p_ptr[i].ID << endl;
                         printf("Name: ");
                         cout << p_ptr[i].name << endl;
                         printf("Address: ");
                         cout << p_ptr[i].address << endl;
+                        */
                         //Save to found structure
                         //search found structure to see if last name already exists
                         for(int j=0;j<MAX_SIZE;j++){
                             P_name = found_prsn[j].name;
-                            P_name.resize(u_in.size());
+                                if(P_name.empty() != true)
+                                {
+                                    P_name.resize(u_in.size());
+                                    transform(P_name.begin(),P_name.end(), P_name.begin(), ::toupper);
+                                }
+
                             //Maybe re-order if statements to get things to work better?
                             //first check if we are at the end of the array
                             //Then check if the indexed spot in the array is empty or same as searched
 
 
                             //If P_name is not at that index, continue search
-                            if(u_in.compare(P_name)!=0 && P_name.size()!= 0 && j < MAX_SIZE){
+                            if(u_in.compare(P_name)!=0 && srchIndex != 0 && j < MAX_SIZE && P_name.empty()!=true){
+                                    cout<<"Searching..."<<endl;
                                     //continue;
                                //break; //should break from this if elseif set
                                }
                             //If P_name IS at that index, break and don't add to struct
-                            else if(u_in.compare(P_name)==0 && P_name.size()!= 0){
+                            else if(u_in.compare(P_name)==0){
                                 //THIS IS GETTING SKIPPED
-                                    cout<<"Name has already been found previously."<<endl;
+                                    cout<<"\n\nName has already been found previously."<<endl;
                                     cout<<"Please search a different name."<<endl;
                                     break;
                             }
 
                             //If end of struct is reached and P_name is not found, add P_name to struct
-                            else if(u_in.compare(P_name)!=0 && P_name.size()!= 0 && j <= srchIndex){
+                            else if(u_in.compare(P_name)!=0 && j <= srchIndex){
                                 //if the searched last name isn't already in structure, add it
                                 //This should be at the END of the search through the array.
                                 found_prsn[srchIndex].ID = int(p_ptr[i].ID);
                                 found_prsn[srchIndex].name = string(p_ptr[i].name);
                                 found_prsn[srchIndex].address = string(p_ptr[i].address);
                                 srchIndex++;
+                                i = MAX_SIZE+1;
+                                break;
 
                             }
                             else{
@@ -444,20 +364,26 @@ void PSearch(struct Person p_ptr[],int pplIndex){
 
             }
             if(flag == true){
-                printf("\nSearch results are listed above. \n");
+                printf("\n\nName was found. \n");
             }
             else{
                 printf("\nThat last name is not in our records. \n");
             }
 
         }
-        else if(yesNo == 'N'){
-            break; //break the While Loop
+        else if(yesNo == 'N')
+            {
+                break; //break the While Loop
+            }
+        else
+        {
+            continue;
         }
-    }
+    }//END FINAL WHILE
 
-printf("\nComplete Search History: \n");
-for(int i=0;i<20;i++){
+printf("\n\nComplete Search History: \n");
+for(int i=0;i<srchIndex;i++)
+    {
     //print found search results
     //not printing correctly. No results in the containers.
     printf("ID: ");
@@ -467,139 +393,7 @@ for(int i=0;i<20;i++){
     printf("Address: ");
     cout << found_prsn[i].address <<endl <<endl;
 
-}
-
+    }
+return;
 };
 
-void PSearch2(struct Person p_ptr[],int pplIndex){
-    string u_in; //user input
-    string L_name;
-    string P_name; //found name, Person's name
-    char yesNo;
-    char valid;
-    int srchIndex = 0; //keep track of how many structures are filled or what structure is being filled
-    bool brkFor = false; //This flag helps to break the nested FOR loop early
-
-    Person *found_prsn = new Person[MAX_SIZE]; //allocate a number of structures
-
-    //User inputs a last name, program searches p_ptr for that name
-    while(yesNo != 'Y' || yesNo != 'N'){
-        cout << "Would you like to search for someone by last name? Y/N ";
-        cin >> yesNo;
-        yesNo = toupper(yesNo);
-
-        if(yesNo == 'Y'){
-            //Perform search
-             //Proceed to search structures by last name & print results
-            cout << "Please enter their last name: ";
-            cin >> u_in;
-            cout << "Is this correct? Y/N ";
-            cin >> valid;
-            valid = toupper(valid);
-            while(valid != 'Y'){
-                //Loop prompting user to retype their input
-                printf("Please enter their last name: ");
-                cin >> u_in;
-                printf("Is this correct? Y/N ");
-                cin >> valid;
-                valid = toupper(valid);
-            }
-            //Now search for u_in against P_ptr
-            //u_in = toupper(u_in.c_str());
-            transform(u_in.begin(),u_in.end(), u_in.begin(), ::toupper);//Convert U_in to uppercase
-            //now use  last name string to search
-            for(int i=0; i<pplIndex; i++){
-                    if(brkFor == true){
-                        brkFor = false;
-                        break;
-                    }
-                    //Searching the entire structure for last name
-                L_name = p_ptr[i].name;
-                L_name.resize(u_in.size());
-                transform(L_name.begin(),L_name.end(), L_name.begin(), ::toupper);
-                cout << "Compare user input to indexed last name. " << u_in.compare(L_name) <<endl; //Expecting 0 when the names match, GETTING SKIPPED
-                if(u_in.compare(L_name)==0){
-                        //print the found struct
-                        printf("\nID: ");
-                        cout << p_ptr[i].ID << endl;
-                        printf("Name: ");
-                        cout << p_ptr[i].name << endl;
-                        printf("Address: ");
-                        cout << p_ptr[i].address << endl;
-                        //add the found struct to search results if it hasn't already been added
-                        if(srchIndex == 0){ //This is getting skipped
-                            //the struct is empty. Just add the item.
-                            cout << "Adding first searched item to list" <<endl;
-                            found_prsn[srchIndex].ID = int(p_ptr[i].ID);
-                            found_prsn[srchIndex].name = string(p_ptr[i].name);
-                            found_prsn[srchIndex].address = string(p_ptr[i].address);
-                            srchIndex++;
-                            break;//break from FOR loop to ask if user wants to search again
-
-                        }
-
-                        //won't even enter this for loop if the struct is empty
-
-
-                        for(int j=0;j<srchIndex;j++){
-                            P_name = found_prsn[j-1].name; //Is there a name in the struct?
-                            P_name.resize(u_in.size());
-
-                            //If P_name IS at that index, and P_Name isn't empty, break from For loop and don't add to struct
-                            if(u_in.compare(P_name)==0 && P_name.size()!= 0){
-                                //THIS IS GETTING SKIPPED
-                                    cout<<"Name has already been found previously."<<endl;
-                                    cout<<"Please search a different name."<<endl;
-                                    brkFor = true; //to exist the nested FOR loop
-                                    break; //exit the for loop, but need to break from the next FOR loop as well. Maybe need a flag here?
-                            }
-                             //If P_name is not at that index, and P_name is not empty, continue search
-                            else if(u_in.compare(P_name)!=0 && P_name.size()!= 0 && j < MAX_SIZE){
-                                    //if u_in is not the same as P_name, and P_name is not empty, and we aren't at the end of the struct
-                                    //continue searching
-
-                                    continue;//jumps to the end of this for loop
-                                    //should break from this if elseif set, skip the remaining conditions
-                               }
-
-                            //If end of struct is reached and P_name is not found, add P_name to struct
-                            else if(u_in.compare(P_name)!=0 && j == srchIndex-1){
-                                //if the searched last name isn't already in structure, add it
-                                //This should be at the END of the search through the array.
-                                cout<<"Adding searched name to search history." <<endl;
-                                found_prsn[j].ID = int(p_ptr[i].ID);
-                                found_prsn[j].name = string(p_ptr[i].name);
-                                found_prsn[j].address = string(p_ptr[i].address);
-                                srchIndex++;
-                                brkFor = true;//set a flag to be used to break from the primary FOR loop
-                                break; //break from this for loop
-
-                            }
-                            else{
-                                cout<<"Error."<<endl;
-                            }
-
-
-
-                        }
-                        //ask if use would like to continue searching
-                        break; //jump out of the for loop and it will ask user if they want to search again
-
-                }
-                else {
-                    //name was not found
-                    cout<< "That name was not found."<<endl;
-                    //ask user if they would like to search again
-                    break; //jump out of the for loop and it will ask the user if they want to search again
-                }
-
-
-    }
-
-}
-else if (yesNo == 'N'){
-            //They don't want to perform a search. End the function.
-            return; //return ends a function
-        }
-    }
-}
