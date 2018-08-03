@@ -28,8 +28,7 @@ struct Person {
 
 };
 struct Found_p {
-    //Trying a separate structure for the searched names list
-    //As an attempt to solve an error
+
     int p_ID;
     string p_name;
     string p_address;
@@ -54,12 +53,11 @@ void printStruct(struct Person p_ptr[],int index)
 }
 
 
-void headerTxt(){
+void headerTxt()
+{
     //Here is the text that prints when Program Begins
-    //Print tips, such as case sensitivity
-    printf("As a note, the answer to Yes/No questions is case sensitive in this program version.\n");
-    printf("Answer all Y/N questions with a single capital letter Y or N.\n");
-    printf("The program will first read the current addresses");
+    printf("Answer all Y/N questions with a single letter Y or N.\n");
+    printf("The program will first read the current addresses from a file.\n");
     printf("When the user inputs an address, the street name must be one word with no spaces. \n\n");
 }
 
@@ -67,7 +65,6 @@ void headerTxt(){
 
 int main()
 {
-    //Person *person_ptr = new Person[20]; //allocate 20 structures, one per person
     struct Person person_ptr[MAX_SIZE];
     ifstream a1("a1.txt");
     string s;
@@ -75,15 +72,16 @@ int main()
 
     headerTxt();
 
-
-    //Here, we are reading the text file and populating the structures
     cout<<"Loading to Structure"<<endl;
-    pplIndex = LD2Struct(person_ptr); //maybe I should return an index number here, to be saved and used in other functions
+    pplIndex = LD2Struct(person_ptr);
     cout<<"Load Complete.\n"<< pplIndex << " people loaded.\n"<<endl;
+
     cout<<"Printing structure.\n"<<endl;
     printStruct(person_ptr,pplIndex); //Print what was loaded to struct
+
     pplIndex = Add2Struct(person_ptr,pplIndex);
-    cout << "Updated index is "<<pplIndex<<"/"<<MAX_SIZE<<endl;
+    cout << "Updated index is "<<pplIndex<<"/"<<MAX_SIZE<<endl;//updated index because more people may have been added
+
     PSearch(person_ptr,pplIndex);
 
     return 0;
@@ -117,7 +115,8 @@ int LD2Struct(struct Person p_ptr[])
 }
 
 
-int Add2Struct(struct Person p_ptr[],int pplIndex){
+int Add2Struct(struct Person p_ptr[],int pplIndex)
+{
     string yesNo; //Holds the answer to a yes/no question
     string valid; // secondary Y/N question, confirm validity of what was entered
     int int_in;
@@ -125,30 +124,28 @@ int Add2Struct(struct Person p_ptr[],int pplIndex){
     string num, street, city, state, zip;
     string address;
 
-    while ((yesNo != "Y")&&(yesNo!= "N")){
-            //Unless the user gives a valid response, this will continue to loop
+    while ((yesNo != "Y")&&(yesNo!= "N"))
+    {
+        //Unless the user gives a valid response, this will continue to loop
         cin.clear();
-       printf("\n Is there an additional person to add? Y/N ");
-       cin >> yesNo;
-       if(yesNo.length()>1)
-       {
-           cout<<"Input too long." <<endl;
-       }
-       else
-        {
-            yesNo = Str2Upper(yesNo);
-        }
+        printf("\n Is there an additional person to add? Y/N ");
+        cin >> yesNo;
+           if(yesNo.length()>1)
+           {
+               cout<<"Input too long." <<endl;
+           }
+           else
+            {
+                yesNo = Str2Upper(yesNo);
+            }
 
-
-        //yesNo = toupper(yesNo);
-
-        //cout << yesNo << endl;
         cout << endl;
     }
     //This is multiple nested While loops. Perhaps there is a better way to do this
     //with one while loop and switch case?
 
-    while (yesNo == "Y" && pplIndex <= MAX_SIZE){
+    while (yesNo == "Y" && pplIndex <= MAX_SIZE)
+    {
             //pplIndex will break the add person loop once the structure is full
         //get ID
         printf("Enter their ID number: ");
@@ -179,28 +176,21 @@ int Add2Struct(struct Person p_ptr[],int pplIndex){
         printf("Is this correct? Y/N ");
         cin >> valid;
 
-        if(valid.length()>1)
-       {
-           cout<<"Input too long." <<endl;
-       }
-       else
-        {
-            valid = Str2Upper(valid);
-        }
-        //valid = toupper(valid);
-
+            if(valid.length()>1)
+           {
+               cout<<"Input too long." <<endl;
+           }
+           else
+            {
+                valid = Str2Upper(valid);
+            }
         cout << endl;
         };
-        //save to structure
-       // person_ptr[pplIndex].ID = *userInput;
-
         valid = " ";
-
 
         //get name
         printf("Enter their Last Name: ");
-        cin >> L_name; //Maybe we need to figure out how to
-        //keep Cin from breaking on the space or comma
+        cin >> L_name;
         printf("Enter their First Name: ");
         cin >> F_name;
         p_ptr[pplIndex].name = L_name + "," + F_name;
@@ -216,34 +206,31 @@ int Add2Struct(struct Person p_ptr[],int pplIndex){
         {
             valid = Str2Upper(valid);
         }
-
-        //valid = toupper(valid);
-
         cout << endl;
 
-        while (valid != "Y"){
-                //This will loop until user is satisfied with their name entry
-        printf("Enter their Last Name: ");
-        cin >> L_name; //Maybe we need to figure out how to
-        //keep Cin from breaking on the space or comma
-        printf("Enter their First Name: ");
-        cin >> F_name;
-        p_ptr[pplIndex].name = L_name + "," + F_name;
-        cout << endl;
-
-        //cin >> *userInput;
-        printf("Is this correct? Y/N ");
-        cin >> valid;
-
-        if(valid.length()>1)
-       {
-           cout<<"Input too long." <<endl;
-       }
-       else
+        while (valid != "Y")
         {
-            valid = Str2Upper(valid);
-        }
-        //valid = toupper(valid);
+                    //This will loop until user is satisfied with their name entry
+            printf("Enter their Last Name: ");
+            cin >> L_name; //Maybe we need to figure out how to
+            //keep Cin from breaking on the space or comma
+            printf("Enter their First Name: ");
+            cin >> F_name;
+            p_ptr[pplIndex].name = L_name + "," + F_name;
+            cout << endl;
+
+            printf("Is this correct? Y/N ");
+            cin >> valid;
+
+            if(valid.length()>1)
+           {
+               cout<<"Input too long." <<endl;
+           }
+           else
+            {
+                valid = Str2Upper(valid);
+            }
+
         cout << endl;
         };
         valid = " " ;
@@ -265,42 +252,36 @@ int Add2Struct(struct Person p_ptr[],int pplIndex){
         {
             valid = Str2Upper(valid);
         }
-        //valid = toupper(valid);
-
         cout << endl;
 
-        while (valid != "Y"){
+        while (valid != "Y")
+        {
                 //This will loop until user is satisfied with their ID entry
                 //The street name cannot have spaces in it in this version
-       printf("Enter their address in this format: \n 999 Street City MI 48230 ");
-        cin >> num >> street >> city >> state >> zip;
-        p_ptr[pplIndex].address = num + ", " + street + ", " + city + ", " + state + ", " + zip;
-        cout << endl;
-        printf("Is this correct? Y/N ");
-        cin >> valid;
+            printf("Enter their address in this format: \n 999 Street City MI 48230 ");
+            cin >> num >> street >> city >> state >> zip;
+            p_ptr[pplIndex].address = num + ", " + street + ", " + city + ", " + state + ", " + zip;
+            cout << endl;
+            printf("Is this correct? Y/N ");
+            cin >> valid;
 
-        if(valid.length()>1)
-       {
-           cout<<"Input too long." <<endl;
-       }
-       else
-        {
-            valid = Str2Upper(valid);
-        }
-        //valid = toupper(valid);
-
-        cout << endl;
+            if(valid.length()>1)
+           {
+               cout<<"Input too long." <<endl;
+           }
+           else
+            {
+                valid = Str2Upper(valid);
+            }
+            cout << endl;
         };
-        //save to structure
-        //person_ptr[pplIndex].address = *userInput;
-
         valid = " ";
 
 
 
 //****************************************
 //This code is just for testing that the data was put into the structure
-        printf("This is the data you added: \n");
+        printf("\nThis is the data you added: \n");
         printf("ID: ");
         cout << p_ptr[pplIndex].ID << endl;
         printf("Name: ");
@@ -327,7 +308,7 @@ int Add2Struct(struct Person p_ptr[],int pplIndex){
             }
             //yesNo = toupper(yesNo);
             cout << endl;
-            }
+        }
 
 
     }
@@ -349,59 +330,55 @@ void PSearch(struct Person p_ptr[],int pplIndex)
 
     //Now we need to let the user search for information by last name
 
-    while(true){//maybe want a better statement than TRUE.
+    while(true)
+    {
         flag = false; //when loop restarts, flag needs to be reset to false
         printf("\nWould you like to search for someone by last name? Y/N ");
         cin >>yesNo;
-        if(yesNo.length()>1)
-       {
-           cout<<"Input too long." <<endl;
-       }
-       else
-        {
-            yesNo = Str2Upper(yesNo);
-        }
-        //yesNo = toupper(yesNo);
+            if(yesNo.length()>1)
+           {
+               cout<<"Input too long." <<endl;
+           }
+           else
+            {
+                yesNo = Str2Upper(yesNo);
+            }
 
 
-        if(yesNo == "Y"){
-            //Proceed to search structures by last name & print results
-            printf("Please enter their last name: ");
-            cin >> u_in;
-            printf("Is this correct? Y/N ");
-            cin >> valid;
-
-            if(valid.length()>1)
-               {
-                   cout<<"Input too long." <<endl;
-               }
-               else
-                {
-                    valid = Str2Upper(valid);
-                }
-            //valid = toupper(valid);
-
-            while(valid != "Y"){
-                //Loop prompting user to retype their input
+            if(yesNo == "Y")
+            {
+                //Proceed to search structures by last name & print results
                 printf("Please enter their last name: ");
                 cin >> u_in;
                 printf("Is this correct? Y/N ");
                 cin >> valid;
 
                 if(valid.length()>1)
-               {
-                   cout<<"Input too long." <<endl;
-               }
-               else
+                   {
+                       cout<<"Input too long." <<endl;
+                   }
+                   else
+                    {
+                        valid = Str2Upper(valid);
+                    }
+
+                while(valid != "Y")
                 {
-                    valid = Str2Upper(valid);
+                    //Loop prompting user to retype their input
+                    printf("Please enter their last name: ");
+                    cin >> u_in;
+                    printf("Is this correct? Y/N ");
+                    cin >> valid;
+
+                    if(valid.length()>1)
+                   {
+                       cout<<"Input too long." <<endl;
+                   }
+                   else
+                    {
+                        valid = Str2Upper(valid);
+                    }
                 }
-
-                //valid = toupper(valid);
-
-
-            }
-            //u_in = toupper(u_in.c_str());
             transform(u_in.begin(),u_in.end(), u_in.begin(), ::toupper);
             //now use  last name string to search
             for(int i=0; i<pplIndex; i++){
@@ -409,20 +386,12 @@ void PSearch(struct Person p_ptr[],int pplIndex)
                 L_name = p_ptr[i].name;
                 L_name.resize(u_in.size());
                 transform(L_name.begin(),L_name.end(), L_name.begin(), ::toupper);
-                    if(u_in.compare(L_name)==0){
-                        //If comparison is true, then print result
-                        /*
-                        printf("\nID: ");
-                        cout << person_ptr[i].ID << endl;
-                        printf("Name: ");
-                        cout << person_ptr[i].name << endl;
-                        printf("Address: ");
-
-                        cout << p_ptr[i].address << endl;
-                        */
+                    if(u_in.compare(L_name)==0)
+                    {
                         //Save to found structure
                         //search found structure to see if last name already exists
-                        for(int j=0;j<MAX_SIZE;j++){
+                        for(int j=0;j<MAX_SIZE;j++)
+                        {
                             P_name = found_prsn[j].name;
                                 if(P_name.empty() != true)
                                 {
@@ -436,13 +405,15 @@ void PSearch(struct Person p_ptr[],int pplIndex)
 
 
                             //If P_name is not at that index, continue search
-                            if(u_in.compare(P_name)!=0 && srchIndex != 0 && j < MAX_SIZE && P_name.empty()!=true){
+                            if(u_in.compare(P_name)!=0 && srchIndex != 0 && j < MAX_SIZE && P_name.empty()!=true)
+                            {
                                     cout<<"Searching..."<<endl;
                                     //continue;
                                //break; //should break from this if elseif set
-                               }
+                            }
                             //If P_name IS at that index, break and don't add to struct
-                            else if(u_in.compare(P_name)==0){
+                            else if(u_in.compare(P_name)==0)
+                            {
                                 //THIS IS GETTING SKIPPED
                                     cout<<"\n\nName has already been found previously."<<endl;
                                     cout<<"Please search a different name."<<endl;
@@ -450,7 +421,8 @@ void PSearch(struct Person p_ptr[],int pplIndex)
                             }
 
                             //If end of struct is reached and P_name is not found, add P_name to struct
-                            else if(u_in.compare(P_name)!=0 && j <= srchIndex){
+                            else if(u_in.compare(P_name)!=0 && j <= srchIndex)
+                            {
 
                                 //if the searched last name isn't already in structure, add it
                                 found_prsn[srchIndex].ID = p_ptr[i].ID;
